@@ -6,7 +6,7 @@ var fs = require("fs");
 app.use(require('connect-livereload')())
 app.use(express.static(__dirname + '/public'));
 
-app.listen(3000)
+app.listen(3000);
 
 
 // Load plugins
@@ -29,17 +29,17 @@ var server = lr();
 
 // Coffee
 gulp.task('coffee', function() {
-    gulp.src('./public/assets/scripts/coffee/**/*.coffee')
+    gulp.src('./public/assets/src/coffee/**/*.coffee')
         .pipe(coffee({bare: true}).on('error', gutil.log))
-        .pipe(gulp.dest('./public/assets/scripts/js'))
+        .pipe(gulp.dest('./public/assets/src/js'))
 });
 
 
-// Javascript
+// Javascript 
 gulp.task('javascript', function () {
     browserify({ debug: true })
         .transform(babelify)
-        .require("./public/assets/scripts/js/zoo.js", { entry: true })
+        .require("./public/assets/src/js/main.js", { entry: true })
         .bundle()
         .on("error", function (err) { console.log("Error: " + err.message); })
         .pipe(fs.createWriteStream("./public/assets/js/app.js"));
@@ -64,8 +64,8 @@ gulp.task('default', ['clean'], function() {
     gulp.start('coffee', 'javascript');
 
     // Watch Coffee files
-    gulp.watch('./public/assets/scripts/coffee/**/*.coffee', ['coffee']);
+    gulp.watch('./public/assets/src/coffee/**/*.coffee', ['coffee']);
 
     // Watch .js files
-    gulp.watch('./public/assets/scripts/js/**/*.js', ['javascript']);
+    gulp.watch('./public/assets/src/js/**/*.js', ['javascript']);
 });
